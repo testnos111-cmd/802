@@ -107,6 +107,18 @@ app.use("/download", express.static('./src/asset/download'))
 app.use("/sdks", express.static('./src/asset/sdks'))
 app.use("/static", express.static('./src/static'))
 
+/* Socket-level diagnostics: distinguish client-side cancellation from server-side errors. */
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const socket = req.socket;
+  const remote = `${socket.remoteAddress || ''}:${socket.remotePort || ''}`;
+  const started = process.hrtime.bigint();
+  socket.on('close', (hadError) => {
+    appendDebug({ type:'socketClose', timestamp:new Date().toISOString(), method:req.method, url:req.originalUrl, remote, hadError, responseEnded:res.writableEnded, responseStatus:res.statusCode, durationMs:Number((Number(process.hrtime.bigint()-started)/1e6).toFixed(3)) });
+  });
+  req.on('aborted', () => appendDebug({type:'requestAborted', timestamp:new Date().toISOString(), method:req.method, url:req.originalUrl, remote}));
+  next();
+});
+
 /* process Error */
 app.use(function(err : Error, req : express.Request, res : express.Response, next : Function) {
     console.error(err.stack);
@@ -119,7 +131,9 @@ app.use(function(err : Error, req : express.Request, res : express.Response, nex
 
 // Older clients may address CDN-derived files beneath /index. Keep the route local
 // so the request is visible in diagnostics rather than escaping to an external host.
-app.use("/index", express.static('./src/asset/index', { fallthrough: true }));
+app.use("/index", express.static('./src/asset/index', { fallthrough: true, index: false }));
+app.use("/file", express.static('./src/asset/file', { fallthrough: true, index: false }));
+app.use("/asset", express.static('./src/asset', { fallthrough: true, index: false }));
 
 /* Legacy compatibility fallback: old 8.0.x clients have a much larger API surface.
  * For unimplemented non-token .ds handshake calls, return the normal encrypted
