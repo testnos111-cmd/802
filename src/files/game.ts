@@ -47,6 +47,12 @@ const sendNotices = async (_req : express.Request, res : express.Response) => {
 router.post("/notice/notices.ds", sendNotices);
 router.post("/notices.ds", sendNotices);
 
+// Diagnostic/legacy aliases used by older 8.0.x clients.
+router.post("/c/webServerCheck.ds", completeEmpty);
+router.get("/c/webServerCheck.ds", completeEmpty);
+router.post("/c/check/serverTime.ds", Handler.asyncHandler(libs.ApiClient.getServerTime));
+router.post("/c/check/configCheck.ds", Handler.asyncHandler(libs.ApiClient.configCheck));
+router.post("/c/notice/notices.ds", sendNotices);
 
 /* WITH TOKEN APIS */
 
