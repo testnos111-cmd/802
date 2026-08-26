@@ -1,0 +1,19 @@
+[{
+    "seq": 771,
+    "itemName": "Crystal 1g",
+    "productId": "dev.crx.crystal771",
+    "currencyQty": 999999,
+    "cashPrice": 1000,
+    "realName": "Crystal 1g",
+    "imgTag": "gem_01_shop.png",
+    "slotPriority": 1,
+    "itemType": "G",
+    "packageSeq": 0,
+    "hideAfterBuy": 0,
+    "cashItemStatus": 1,
+    "activityPoint": 10,
+    "eventActivityPoint": 30,
+    "endVisibleDt": null,
+    "startDt": null,
+    "endDt": null
+}]

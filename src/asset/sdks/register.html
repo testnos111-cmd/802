@@ -1,0 +1,231 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HB SERVER</title>
+    <script>
+    function toggleMenu() {
+        var x = document.getElementsByTagName("nav")[0];
+        if (x.className === "responsive") {
+            x.className = "";
+        } else {
+            x.className = "responsive";
+        }
+    }
+  
+    async function join(){
+    var res = await fetch(`/v1/join.json`,{
+        method:"GET",
+        headers:{},
+    })
+        
+    var result = (await res.json())
+    console.log(result)
+    if(result.data.token){
+        location.href = `kakao://appauth?access_token=${result.data['token']}&refresh_token=undefined&expires_in=undefined`
+    } else {
+        alert("오류가 발생했습니다.")
+    }
+   
+}
+
+    
+  
+    </script>
+
+    <style>
+    /* CSS 스타일은 여기에 입력해주세요 */
+    body {
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        background-color: #f7f7f7;
+        margin: 0;
+    }
+    
+    #menu{
+        z-index: 99999;
+        margin-top: -80px;
+        width: 80vw;
+        position: fixed;    
+        overflow: auto;
+        padding: 0px 10vw;
+        background-color: #333;
+        overflow: hidden;
+    }
+    .toggle_button {
+        display : none;
+    }
+  
+    .menu_button {
+        font-size: 15px;
+        float: left;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+    
+    .menu_button :hover {
+        background-color: #ddd;
+        color: black;
+    }
+  
+    .main {
+        margin-top: 80px;
+        padding: 0px 10vw;
+    }
+  
+    .content {
+        padding: 20px;
+        text-align: left;
+        margin: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        float: left;
+        padding: 14px 16px;
+        height: auto;
+        margin: 0px;
+        }
+  
+    #login_token {
+        width : 100%; 
+        padding : 8px 16px;
+        border-radius: 5px;
+        border: 1px solid #333
+  
+    }
+  
+    #login_button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        color : white;
+        background-color: #333;
+        width: 40%;
+        float: right;
+    }
+  
+    hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border-top: 1px solid #333;
+        border-bottom: none;
+        border-left: none;
+        border-bottom: none;
+    }
+  
+    .line {
+        margin: 5px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-top: 1px solid #cccccc;
+        border-bottom: none;
+        border-left: none;
+        border-bottom: none;
+    }
+  
+    .button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        color : white;
+        background-color: #333;
+        width: 40%;
+        float: right;
+    }
+  
+    .input {
+        width : 100%; 
+        padding : 8px 16px;
+        border-radius: 5px;
+        border: 1px solid #333
+    }
+    
+    @media screen and (max-width: 600px) {
+  
+  
+    .logo {
+        font-size: 20px;
+        }
+  
+    
+  
+  
+    #login_button {
+        width: 100%;
+        float: right;
+    }
+  
+    .button {
+        width: 100%;
+        float: right;
+    }
+  
+        #menu{
+        padding: 0px 5vw;
+        width: 90vw;
+        }
+  
+        .main {
+        padding: 0px 5vw;
+    }
+  
+        .toggle_button {
+        float: right;
+        display: block;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        }
+        
+        .menu_button {
+            display : none;
+        }
+  
+        nav.responsive {
+            position: relative;
+        }
+  
+        .responsive .toggle_button {
+            float: none;
+            display: block;
+            text-align: right;
+        }
+    
+        .responsive .menu_button {
+            float: none;
+            display: block;
+            text-align: left;
+        }
+  
+        .responsive .menu_button:hover {
+        background-color: #ddd;
+        color: black;
+        }   
+    }
+    </style>
+
+  </head>
+  <div id="menu">
+    <nav>
+        <a class="logo">HB SERVER</a>
+    </nav>
+  </div>
+  <div class="main">   
+      <div class="content">
+      <h1>SERVER 회원가입</h1>
+      <hr>
+      <br>
+      <button class="button" onclick="join()">회원가입</button>
+      <br><br><br>
+      </div>
+  </div>
+  

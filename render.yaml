@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: kcr-server
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    envVars:
+      - key: MONGODB_URI
+        sync: false
