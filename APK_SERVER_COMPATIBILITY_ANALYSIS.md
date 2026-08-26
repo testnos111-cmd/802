@@ -21,3 +21,7 @@ Server encrypted packets are explicitly returned as `application/json`.
 
 ## Important limitation
 The APK has not been rebuilt/signed in this environment, so this directory is the patched decompile. The server patch is intended to make the old 8.0.2 handshake tolerant of the protocol variants actually exposed by the APK.
+
+
+# v7 diagnostic correction
+The HTTP logger no longer double-counts res.send/res.json bodies; only wire-level write/end chunks are captured. version.json is now a deterministic dedicated route with version 8.019 and empty store URLs.

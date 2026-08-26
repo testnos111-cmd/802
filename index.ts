@@ -36,8 +36,6 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
   const MAX_CAPTURE = 262144;
   const originalWrite = res.write.bind(res);
   const originalEnd = res.end.bind(res);
-  const originalSend = (res as any).send?.bind(res);
-  const originalJson = (res as any).json?.bind(res);
 
   const capture = (chunk: any) => {
     if (chunk == null || captured >= MAX_CAPTURE) return;
@@ -52,8 +50,6 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
     if (chunk) capture(chunk);
     return originalEnd(chunk, encoding, cb);
   };
-  if (originalSend) (res as any).send = (body: any) => { capture(body); return originalSend(body); };
-  if (originalJson) (res as any).json = (body: any) => { capture(JSON.stringify(body)); return originalJson(body); };
 
   const requestEvent = {
     type: 'request', id, timestamp: new Date().toISOString(), method: req.method,
@@ -101,6 +97,30 @@ import { api } from './src/files/api'; app.use("/v1", api);
 import { game } from './src/files/game'; app.use("/", game); app.use("//", game);
 /* Get playGame router */
 import { play } from './src/files/play'; app.use("/", play); app.use("//", play);
+
+/* Exact legacy 8.02 version endpoint. Keep the response deterministic and bypass static-file/extension behavior. */
+app.get("/download/default/version.json", (req: express.Request, res: express.Response) => {
+  const payload = {
+    googlePlayTitle: "",
+    googlePlayMessage: "",
+    title: "",
+    kakaoGameShopLink: "",
+    mainVersion: 8.019,
+    googlePlayMainVersion: 8.019,
+    kakaoGameShopTitle: "",
+    itunesLink: "",
+    googlePlayLink: "",
+    message: "",
+    kakaoGameShopVersion: 8.019,
+    kakaoGameShopMessage: ""
+  };
+  const body = JSON.stringify(payload);
+  res.setHeader("Content-Type", "application/json; charset=UTF-8");
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Content-Length", Buffer.byteLength(body));
+  res.status(200).end(body);
+});
 
 /* Set static dir for user */
 app.use("/download", express.static('./src/asset/download'))
