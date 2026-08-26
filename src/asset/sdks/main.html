@@ -29,7 +29,7 @@
         }
         
         if(result.status == 0){
-            location.href = `kakao://appauth?access_token=${token.value}&refresh_token=undefined&expires_in=undefined`
+            location.replace(`kakao://appauth?access_token=${encodeURIComponent(result.data.token || token.value)}&refresh_token=${encodeURIComponent(result.data.refresh_token || result.data.token || token.value)}&expires_in=${result.data.expires_in || 315360000}`)
         } else {
             alert("올바르지 않은 TOKEN 입니다.")
         }

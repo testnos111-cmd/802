@@ -31,7 +31,12 @@ router.use("/join.json", async (req : express.Request, res : express.Response, n
 router.use("/login.json", libs.ApiClient.checkApiToken, async (req : express.Request, res : express.Response, next : Function)=>{
     var result = await libs.ApiClient.loginUser(String(req.query.access_token));
     if(result.status == 0) {
-        res.json(result);
+        const out: any = result;
+        if (out && out.data) {
+            out.data.refresh_token = String(req.query.access_token);
+            out.data.expires_in = 315360000;
+        }
+        res.json(out);
     } else {
         next();
     }
